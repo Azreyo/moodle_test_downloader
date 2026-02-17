@@ -22,14 +22,14 @@
   },
 
   "background": {
-    "scripts": ["background.js"],
+    "scripts": ["src/background.js"],
     "persistent": false
   },
 
   "content_scripts": [
     {
       "matches": ["*://edu.ukf.sk/*"],
-      "js": ["mtd.js"],
+      "js": ["src/mtd.js"],
       "run_at": "document_idle"
     }
   ]

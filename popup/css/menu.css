@@ -1,60 +1,130 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
 body {
   margin: 0;
-  font-family: Arial, sans-serif;
-  width: 300px;
-  background-color: #f7f7f7;
-  color: #333;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  width: 380px;
+  height: 500px;
+  background: #ffffff;
+  color: #1a202c;
 }
 
 .container {
-  padding: 15px;
+  padding: 24px;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
 }
 
 h2 {
-  font-size: 18px;
-  margin-bottom: 10px;
-  text-align: center;
+  font-size: 20px;
+  font-weight: 600;
+  margin-bottom: 20px;
+  color: #1a202c;
+  letter-spacing: -0.3px;
 }
 
 #test-list {
   list-style: none;
   padding: 0;
-  max-height: 200px;
+  flex: 1;
   overflow-y: auto;
-  border: 1px solid #ddd;
-  background: #fff;
-  border-radius: 5px;
+  margin-bottom: 20px;
+}
+
+#test-list::-webkit-scrollbar {
+  width: 6px;
+}
+
+#test-list::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+#test-list::-webkit-scrollbar-thumb {
+  background: #e2e8f0;
+  border-radius: 3px;
+}
+
+#test-list::-webkit-scrollbar-thumb:hover {
+  background: #cbd5e0;
 }
 
 #test-list li {
-  padding: 8px 10px;
-  border-bottom: 1px solid #eee;
+  padding: 12px 16px;
+  margin-bottom: 8px;
   cursor: pointer;
   font-size: 14px;
-}
-
-#test-list li:last-child {
-  border-bottom: none;
+  transition: all 0.15s ease;
+  color: #4a5568;
+  border-radius: 8px;
+  background: #f7fafc;
+  border: 1px solid #e2e8f0;
 }
 
 #test-list li:hover {
-  background-color: #e0f7fa;
+  background: #edf2f7;
+  border-color: #cbd5e0;
+  color: #2d3748;
+}
+
+#test-list:empty::after {
+  content: 'No saved tests';
+  display: block;
+  text-align: center;
+  padding: 48px 20px;
+  color: #a0aec0;
+  font-size: 14px;
 }
 
 .actions {
-  margin-top: 10px;
-  text-align: center;
+  display: flex;
+  gap: 10px;
 }
 
 button {
-  padding: 6px 12px;
-  background-color: #1976d2;
-  color: #fff;
+  flex: 1;
+  padding: 10px 20px;
+  font-size: 14px;
+  font-weight: 500;
   border: none;
-  border-radius: 3px;
+  border-radius: 6px;
   cursor: pointer;
+  transition: all 0.2s ease;
 }
 
-button:hover {
-  background-color: #1565c0;
+#save-btn {
+  background: #000000;
+  color: #ffffff;
+}
+
+#save-btn:hover {
+  background: #2d3748;
+}
+
+#save-btn:active {
+  background: #1a202c;
+}
+
+#clear-btn {
+  background: #f7fafc;
+  color: #4a5568;
+  border: 1px solid #e2e8f0;
+}
+
+#clear-btn:hover {
+  background: #edf2f7;
+  border-color: #cbd5e0;
+}
+
+#clear-btn:active {
+  background: #e2e8f0;
+}
+
+button:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
 }
