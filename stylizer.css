@@ -1,0 +1,70 @@
+form {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.aabtn {
+    display: none;
+}
+
+.subq{
+    display: none;
+}
+img, .icon, .emoticon {
+    width: 3%;
+}
+
+.que {
+    display: flex;
+    border: 5px red;
+    margin-bottom: 5%;
+    padding: 1% 5% 1% 1%;
+    border:1px solid grey;
+    border-radius: 20px;
+    justify-content: center;
+    align-self: center;
+}
+.accesshide {
+    text-align: end;
+    margin-right: 1%;
+    font-size: 50%;
+}
+.state,.grade {
+    margin: 50px;
+    padding: 5px;
+    border: 1px solid black;
+    border-radius: 5px;
+}
+
+.form-control {
+    border: 1px solid #e9ecef;
+    background-color: #e9ecef;
+    border-radius: 10px;
+    padding: 5px;
+}
+
+
+.rightanswer {
+    background-color: #fff3cd;
+    border-radius: 5px;
+    padding: 4px 12px;
+    color: #c39f35;
+}
+
+fieldset.ablock .answer .r0,
+fieldset.ablock .answer .r1 {
+    display: flex;        
+    align-items: center;
+    gap: 5px;
+}
+
+
+fieldset.ablock .answer .r0 p,
+fieldset.ablock .answer .r1 p {
+    display: inline;
+    margin: 0;      
+}
+
+fieldset.ablock .answer div.flex-fill {
+    display: inline;
+}

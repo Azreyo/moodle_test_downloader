@@ -1,0 +1,36 @@
+{
+  "manifest_version": 2,
+  "name": "MTD",
+  "version": "1.0",
+  "description": "Automaticky stahuje moodle testy aj po jeho odstraneni",
+
+  "icons": {
+    "48": "icons/logo.svg"
+  },
+
+  "permissions": [
+    "notifications",
+    "tabs",
+    "storage",
+    "downloads"
+  ],
+
+  "browser_action": {
+    "default_icon": "icons/logo.svg",
+    "default_title": "MTD",
+    "default_popup": "popup/menu.html"
+  },
+
+  "background": {
+    "scripts": ["background.js"],
+    "persistent": false
+  },
+
+  "content_scripts": [
+    {
+      "matches": ["*://edu.ukf.sk/*"],
+      "js": ["mtd.js"],
+      "run_at": "document_idle"
+    }
+  ]
+}

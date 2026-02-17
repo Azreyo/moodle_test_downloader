@@ -1,0 +1,60 @@
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  width: 300px;
+  background-color: #f7f7f7;
+  color: #333;
+}
+
+.container {
+  padding: 15px;
+}
+
+h2 {
+  font-size: 18px;
+  margin-bottom: 10px;
+  text-align: center;
+}
+
+#test-list {
+  list-style: none;
+  padding: 0;
+  max-height: 200px;
+  overflow-y: auto;
+  border: 1px solid #ddd;
+  background: #fff;
+  border-radius: 5px;
+}
+
+#test-list li {
+  padding: 8px 10px;
+  border-bottom: 1px solid #eee;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+#test-list li:last-child {
+  border-bottom: none;
+}
+
+#test-list li:hover {
+  background-color: #e0f7fa;
+}
+
+.actions {
+  margin-top: 10px;
+  text-align: center;
+}
+
+button {
+  padding: 6px 12px;
+  background-color: #1976d2;
+  color: #fff;
+  border: none;
+  border-radius: 3px;
+  cursor: pointer;
+}
+
+button:hover {
+  background-color: #1565c0;
+}

@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" width="48" height="48">
+  <!-- Background circle -->
+  <circle cx="24" cy="24" r="22" fill="#FF7F00"/>
+  
+  <!-- Document/Test paper -->
+  <rect x="14" y="10" width="20" height="22" rx="2" fill="#FFFFFF"/>
+  
+  <!-- Test lines (simplified) -->
+  <line x1="17" y1="15" x2="31" y2="15" stroke="#FF7F00" stroke-width="1.5" stroke-linecap="round"/>
+  <line x1="17" y1="19" x2="31" y2="19" stroke="#FF7F00" stroke-width="1.5" stroke-linecap="round"/>
+  <line x1="17" y1="23" x2="27" y2="23" stroke="#FF7F00" stroke-width="1.5" stroke-linecap="round"/>
+  
+  <!-- Checkmark -->
+  <polyline points="17,27 20,29 24,25" fill="none" stroke="#FF7F00" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+  
+  <!-- Download arrow -->
+  <g transform="translate(24, 36)">
+    <rect x="-1.5" y="-8" width="3" height="10" fill="#FFFFFF" rx="1"/>
+    <polygon points="0,4 -4,0 4,0" fill="#FFFFFF"/>
+  </g>
+  
+  <!-- Automation indicator (small gear) -->
+  <circle cx="32" cy="14" r="4" fill="#4A90E2"/>
+  <circle cx="32" cy="14" r="2.5" fill="#FFFFFF"/>
+</svg>
