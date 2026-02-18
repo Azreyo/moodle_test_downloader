@@ -5,7 +5,7 @@ Downloads moodle tests before teachers can hide them.
 
 Still in development, some stuff might not work.
 # Supported browsers
-currently now only works for firefox but in the future when the extension will somehow work I will try to make it for chromium
+currently now it only works for firefox but in the future when the extension will somehow work I will try to make it for chromium
 
 ## Installation
 
