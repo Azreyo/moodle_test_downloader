@@ -1,55 +1,62 @@
-// Update badge with the number of saved tests
-function updateBadge() {
-  browser.storage.local.get({ saved: [] }).then((data) => {
-    const count = data.saved.length;
-    if (count > 0) {
-      browser.browserAction.setBadgeText({ text: count.toString() });
-      browser.browserAction.setBadgeBackgroundColor({ color: "#cc0000" });
-    } else {
-      browser.browserAction.setBadgeText({ text: "" });
+function openDatabase() {
+  return new Promise((resolve, reject) => {
+    const request = indexedDB.open('TestDB', 1);
+
+    request.onupgradeneeded = function (event) {
+      const db = event.target.result;
+
+      if(!db.objectStorageNames.contains("test")) {
+        console.log("Database doesn't contain anything!")
+        db.createObjectStore("test", {
+          keyPath: "id",
+          autoIncrement: true
+        });
+      }
+    };
+
+    request.onsuccess = function (event) {
+      resolve(event.target.result);
+    }
+
+    request.onerror = function (event) {
+      console.log("Error")
+      resolve(event.target.result);
     }
   });
 }
 
-// Listen for messages from content script
-browser.runtime.onMessage.addListener((message, sender) => {
-  if (message.type === "testPageDetected") {
-    const pageUrl = message.url;
+async function saveToDatabase(data) {
+  const db = await openDatabase();
+  
+  return new Promise((resolve, reject) => {
+    const transaction = db.transaction("test", "readWrite");
+    const store = db.objectStore("test");
 
-    browser.storage.local.get({ saved: [] }).then((data) => {
-      const saved = data.saved;
+    const reqeust = store.add({
+      name: data.name,
+      subject: data.subject,
+      html: data.html,
+      createdAt: new Date()
+    })
+  })
+}
 
-      if (!saved.includes(pageUrl)) {
-        saved.push(pageUrl);
-        browser.storage.local.set({ saved }).then(() => {
-          console.log("Saved new test URL:", pageUrl);
-
-          // Update badge
-          updateBadge();
-
-          // download the HTML of the page
-          if (sender.tab && sender.tab.id) {
-            browser.tabs.executeScript(sender.tab.id, {
-              code: "document.documentElement.outerHTML;"
-            }).then((results) => {
-              if (results && results[0]) {
-                const htmlContent = results[0];
-                const blob = new Blob([htmlContent], { type: "text/html" });
-                const url = URL.createObjectURL(blob);
-                browser.downloads.download({
-                  url,
-                  filename: `MTD-${Date.now()}.html`,
-                  saveAs: false
-                });
-              }
-            });
-          }
-        });
-      } else {
-        updateBadge();
-      }
+browser.runtime.onMessage.addListener((request, sender, sendResponse) => {
+  if (request.action === "saveTest") {
+    saveToDatabase({
+      name: request.name,
+      subject: request.subject,
+      html: request.html
+    }).then(() => {
+      console.log("Test saved successfully!");
+      sendResponse({ success: true });
+    }).catch((error) => {
+      console.error("Error saving test:", error);
+      sendResponse({ success: false, error: error.message });
     });
+    
+    return true;
   }
 });
 
-updateBadge();
+openDatabase();
