@@ -13,9 +13,9 @@ Download from github and load it into your browser.
 
 1. Go to a public moodle test that shows results
 2. Click the MTD icon
-3. Click save when you want to save it
+3. Click save when you want to save it (currently not working)
 
-The test gets saved to IndexedDB in your browser.
+The test gets saved to IndexedDB in your browser (not yet).
 
 ## Note
 
