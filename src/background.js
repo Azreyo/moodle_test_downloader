@@ -83,40 +83,14 @@ async function saveToDatabase(data) {
 
 let pendingTest = null;
 
-browser.runtime.onMessage.addListener((request, sender, sendResponse) => {
-  if (request.action === "saveTest") {
-    pendingTest = {
-      name: request.name,
-      subject: request.subject,
-      html: request.html
-    };
-    console.log("Test data captured, waiting for user to save...");
-    sendResponse({ success: true, pending: true });
-    return true;
+browser.runtime.onMessage.addListener((message, sender, sendResponse) => {
+
+  if (message.action === "captureTest") {
+    pendingTest = message.data;
+    sendResponse({ success: true });
   }
-  
-  if (request.action === "confirmSave") {
-    if (!pendingTest) {
-      sendResponse({ success: false, error: "No test data to save" });
-      return true;
-    }
-    
-    saveToDatabase(pendingTest).then(() => {
-      console.log("Test saved successfully to IndexedDB!");
-      pendingTest = null;
-      sendResponse({ success: true });
-    }).catch((error) => {
-      console.error("Error saving test:", error);
-      sendResponse({ success: false, error: error.message });
-    });
-    
-    return true;
-  }
-  
-  if (request.action === "getPendingTest") {
+
+  if (message.action === "getPendingTest") {
     sendResponse({ test: pendingTest });
-    return true;
   }
 });
-
-openDatabase();

@@ -1,6 +1,7 @@
 document.addEventListener("DOMContentLoaded", () => {
   const testList = document.getElementById("test-list");
   const saveBtn = document.getElementById("save-btn");
+  const previewBtn = document.getElementById("preview-btn");
   const clearBtn = document.getElementById("clear-btn");
 
   // Load saved tests from storage
@@ -45,6 +46,19 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   });
 
+  previewBtn.addEventListener("click", async () => {
+    browser.runtime.sendMessage({ action: "getPendingTest" }, (response) => {
+
+  if (response.test) {
+    console.log("Received test:", response.test);
+  } else {
+    console.log("No test available");
+  }
+
+});
+
+  })
+
   // Clear history
   clearBtn.addEventListener("click", () => {
     chrome.storage.local.set({ saved: [] }, () => {
@@ -56,3 +70,4 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   });
 });
+
