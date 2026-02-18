@@ -1,12 +1,22 @@
-# Moodle Test Downloader (MTD)
+# Moodle Test Downloader
 ## This project is currently under development. Some features may not work properly or may not make complete sense yet.
-Moodle test downloader so teachers cannot hide test if it was once public.
 
-# Installation
-Download extension from github then import it into your browser WOP
+Downloads moodle tests before teachers can hide them.
 
-# How to use
-If test is public click on the icon of MTD then click **create directory** and name it. If you don't want a directory click **save now**
+Still in development, some stuff might not work.
 
-# Troubleshooting
-MTD cannot download test if it was not public once or shown results (yet)
+## Installation
+
+Download from github and load it into your browser.
+
+## How to use
+
+1. Go to a public moodle test that shows results
+2. Click the MTD icon
+3. Click save when you want to save it
+
+The test gets saved to IndexedDB in your browser.
+
+## Note
+
+Only works on tests that were public at least once. Can't download hidden tests.

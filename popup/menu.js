@@ -1,5 +1,6 @@
 document.addEventListener("DOMContentLoaded", () => {
   const testList = document.getElementById("test-list");
+  const saveBtn = document.getElementById("save-btn");
   const clearBtn = document.getElementById("clear-btn");
 
   // Load saved tests from storage
@@ -20,6 +21,28 @@ document.addEventListener("DOMContentLoaded", () => {
         testList.appendChild(li);
       });
     }
+  });
+
+  browser.runtime.sendMessage({ action: "getPendingTest" }, (response) => {
+    if (response.test) {
+      saveBtn.disabled = false;
+      saveBtn.textContent = `Save: ${response.test.name || 'Test'}`;
+    } else {
+      saveBtn.disabled = true;
+      saveBtn.textContent = "Save (No test captured)";
+    }
+  });
+
+  saveBtn.addEventListener("click", () => {
+    browser.runtime.sendMessage({ action: "confirmSave" }, (response) => {
+      if (response.success) {
+        alert("Test saved to database!");
+        saveBtn.disabled = true;
+        saveBtn.textContent = "Save (No test captured)";
+      } else {
+        alert("Error: " + (response.error || "Could not save test"));
+      }
+    });
   });
 
   // Clear history
