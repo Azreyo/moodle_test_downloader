@@ -28,7 +28,7 @@
 
   "content_scripts": [
     {
-      "matches": ["*://edu.ukf.sk/*"],
+      "matches": ["<all_urls>"],
       "js": ["src/mtd.js"],
       "run_at": "document_idle"
     }

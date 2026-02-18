@@ -5,7 +5,7 @@ testForm = document.querySelector('.questionflagsaveform');
 
 if (testForm && testIsDone){
     preload = '<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>test</title><link rel="stylesheet" href="/styles/stylizer.css"></head><body>' + testForm.outerHTML +'</body></html>'
-    
+    console.log("Form found!")
     browser.runtime.sendMessage({
         action: "saveTest",
         name: testName?.trim(),
