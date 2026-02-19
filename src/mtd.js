@@ -33,17 +33,19 @@ async function openWithInlineCSS() {
     return preload;
 }
 
-if (testForm && testIsDone){
-    preload = preloadHTML();
+(async () => {
+  if (testForm && testIsDone){
+        preload = await preloadHTML();
 
-    browser.runtime.sendMessage({
-        action: "CaptureTest",
-        data: {
-            name: testName,
-            subject: testSubjectName,
-            html: preload // TODO: i am stupid and cannot figure out the f error
-        }
-    })
-}  else { 
-    console.log("Test form not found or is not done!");
-}
+        browser.runtime.sendMessage({
+            action: "CaptureTest",
+            data: {
+                name: testName,
+                subject: testSubjectName,
+                html: preload
+            }
+          })
+    }  else { 
+        console.log("Test form not found or is not done!");
+    }
+}) ();
