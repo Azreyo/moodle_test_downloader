@@ -4,18 +4,34 @@ const saveBtn = document.getElementById("save-btn");
 const previewBtn = document.getElementById("preview-btn");
 const clearBtn = document.getElementById("clear-btn");
 let statusElement = document.getElementById("status");
+let pendingTestData = null;
 
-
-response = async () => { await browser.runtime.sendMessage({action: "captureTest"});
-  if (response.success) {
-    alert(response.data.html);
-    statusElement.textContent = "Test Content Received";
-    
-  } else {
-    statusElement.textContent = "No test found";
+browser.runtime.onMessage.addListener((message, sender, sendResponse) => {
+  console.log("Popup received message:", message);
+  if (message.action === "sendPendingTest") {
+    pendingTestData = message.data;
+    sendResponse({ success: true });
   }
-}
+  return true;
+});
+
+browser.runtime.sendMessage({ action: "getPendingTest" })
+  .then(response => {
+    console.log("Got pending test response:", response);
+    if (response && response.data) {
+      pendingTestData = response.data;
+      statusElement.textContent = "Test captured: " + response.data.name;
+    }
+  })
+  .catch(err => console.log("No pending test:", err));
+
 previewBtn.addEventListener("click", async () => {
+  if (pendingTestData) {
+    const win = window.open('', '_blank');
+    win.document.write(pendingTestData.html);
+  } else {
+    alert("No test captured yet");
+  }
 });
 
 

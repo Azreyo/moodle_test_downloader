@@ -11,7 +11,6 @@ function updateBadge() {
 }
 
 let dbInstance = null;
-
 function openDatabase() {
   if (dbInstance) {
     return Promise.resolve(dbInstance);
@@ -93,6 +92,11 @@ browser.runtime.onMessage.addListener((message, sender, sendResponse) => {
         subject: message.data.subject,
         html: message.data.html
       }
-    })
+    }).catch(err => {
+      console.log("Could not send to popup (popup may be closed):", err.message);
+    });
+  } else if (message.action === "getPendingTest") { 
+    console.log("Sending pending test to popup:", pendingTest); // Debug
+    sendResponse({ success: true, data: pendingTest });
   }
 });
