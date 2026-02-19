@@ -3,13 +3,10 @@ form {
     justify-content: center;
     align-items: center;
 }
-.aabtn {
+.aabtn, .subq, .submitbtns {
     display: none;
 }
 
-.subq{
-    display: none;
-}
 img, .icon, .emoticon {
     width: 3%;
 }
