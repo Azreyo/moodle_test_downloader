@@ -2,7 +2,8 @@
   "manifest_version": 2,
   "name": "MTD",
   "version": "1.0",
-  "description": "Automaticky stahuje moodle testy aj po jeho odstraneni",
+  "author": "Azreyo",
+  "description": "Downloader for Moodle test before teacher hides them",
 
   "icons": {
     "48": "icons/logo.svg"
@@ -36,5 +37,15 @@
 
   "web_accessible_resources": [
     "styles/stylizer.css"
-  ]
+  ],
+
+  "browser_specific_settings": {
+    "gecko": {
+      "id": "mtd@moodle-test-downloader",
+      "strict_min_version": "142.0",
+      "data_collection_permissions": {
+        "required": ["none"]
+      }
+    }
+  }
 }

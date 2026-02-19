@@ -27,6 +27,12 @@ This project is currently under active development. Some features may be incompl
 
 ### Firefox
 
+#### From Firefox Add-ons (recommended) *(awaiting review)*
+1. Visit the [Moodle Test Downloader](https://addons.mozilla.org/firefox/addon/moodle-test-downloader/) page on Firefox Add-ons
+2. Click "Add to Firefox"
+3. Accept the permissions prompt
+
+#### Manual Installation
 1. Download or clone this repository
 2. Open Firefox and navigate to `about:debugging`
 3. Click "This Firefox" in the left sidebar
@@ -35,7 +41,7 @@ This project is currently under active development. Some features may be incompl
 
 ### Chrome/Chromium (Not yet supported)
 
-Support for Chromium-based browsers is planned for future .
+Support for Chromium-based browsers is planned for future.
 
 ## Usage
 

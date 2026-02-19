@@ -50,26 +50,55 @@ function loadTests() {
 }
 
 function displayTests(tests) {
-  testList.innerHTML = "";
+  testList.textContent = "";
   if (tests.length === 0) {
-    testList.innerHTML = '<li style="font-style: italic; cursor: default;">No saved tests yet</li>';
+    const emptyLi = document.createElement("li");
+    emptyLi.style.fontStyle = "italic";
+    emptyLi.style.cursor = "default";
+    emptyLi.textContent = "No saved tests yet";
+    testList.appendChild(emptyLi);
     return;
   }
   
   tests.forEach(test => {
     const li = document.createElement("li");
-    li.innerHTML = `
-      <div style="display: flex; justify-content: space-between; align-items: center;">
-        <div style="flex: 1;">
-          <strong>${test.name}</strong><br>
-          <small style="color: #718096;">${test.subject} • ${new Date(test.createdAt).toLocaleDateString()}</small>
-        </div>
-        <div style="display: flex; gap: 8px;">
-          <button class="view-btn" data-id="${test.id}" style="padding: 4px 12px; font-size: 12px; background: #4299e1; color: white;">View</button>
-          <button class="delete-btn" data-id="${test.id}" style="padding: 4px 12px; font-size: 12px; background: #e53e3e; color: white;">Delete</button>
-        </div>
-      </div>
-    `;
+
+    const wrapper = document.createElement("div");
+    wrapper.style.cssText = "display: flex; justify-content: space-between; align-items: center;";
+
+    const info = document.createElement("div");
+    info.style.flex = "1";
+
+    const nameEl = document.createElement("strong");
+    nameEl.textContent = test.name;
+    info.appendChild(nameEl);
+    info.appendChild(document.createElement("br"));
+
+    const meta = document.createElement("small");
+    meta.style.color = "#718096";
+    meta.textContent = test.subject + " \u2022 " + new Date(test.createdAt).toLocaleDateString();
+    info.appendChild(meta);
+
+    const actions = document.createElement("div");
+    actions.style.cssText = "display: flex; gap: 8px;";
+
+    const viewBtn = document.createElement("button");
+    viewBtn.className = "view-btn";
+    viewBtn.dataset.id = test.id;
+    viewBtn.style.cssText = "padding: 4px 12px; font-size: 12px; background: #4299e1; color: white;";
+    viewBtn.textContent = "View";
+
+    const deleteBtn = document.createElement("button");
+    deleteBtn.className = "delete-btn";
+    deleteBtn.dataset.id = test.id;
+    deleteBtn.style.cssText = "padding: 4px 12px; font-size: 12px; background: #e53e3e; color: white;";
+    deleteBtn.textContent = "Delete";
+
+    actions.appendChild(viewBtn);
+    actions.appendChild(deleteBtn);
+    wrapper.appendChild(info);
+    wrapper.appendChild(actions);
+    li.appendChild(wrapper);
     testList.appendChild(li);
   });
   
@@ -94,8 +123,9 @@ function viewTest(id) {
   browser.runtime.sendMessage({ action: "getTestById", id: id })
     .then(response => {
       if (response.success && response.test) {
-        const win = window.open('', '_blank');
-        win.document.write(response.test.html);
+        const blob = new Blob([response.test.html], { type: "text/html" });
+        const url = URL.createObjectURL(blob);
+        browser.tabs.create({ url });
       }
     })
     .catch(err => console.error("Failed to view test:", err));
@@ -117,8 +147,9 @@ loadTests();
 
 previewBtn.addEventListener("click", async () => {
   if (pendingTestData) {
-    const win = window.open('', '_blank');
-    win.document.write(pendingTestData.html);
+    const blob = new Blob([pendingTestData.html], { type: "text/html" });
+    const url = URL.createObjectURL(blob);
+    browser.tabs.create({ url });
   } else {
     alert("No test captured yet");
   }
