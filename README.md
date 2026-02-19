@@ -1,5 +1,5 @@
 # Moodle Test Downloader (MTD)
-
+The project is still in early development. Some features may not work properly, or they may not make total sense.
 A browser extension that captures and saves Moodle test content before it becomes unavailable. The extension stores test data locally using IndexedDB, allowing students to review test questions and answers even after teachers restrict access.
 
 ## Project Status
