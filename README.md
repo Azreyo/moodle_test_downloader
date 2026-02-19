@@ -37,7 +37,7 @@ This project is currently under active development. Some features may be incompl
 2. Open Firefox and navigate to `about:debugging`
 3. Click "This Firefox" in the left sidebar
 4. Click "Load Temporary Add-on"
-5. Select the `manifest.json` file from the downloaded repository
+5. Select the `manifest.json` or `mtd-1.0.js` file from the downloaded repository
 
 ### Chrome/Chromium (Not yet supported)
 
