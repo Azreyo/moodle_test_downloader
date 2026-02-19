@@ -36,12 +36,12 @@ async function openWithInlineCSS() {
 (async () => {
   if (testForm && testIsDone){
         preload = await preloadHTML();
-
+        console.log("Test found sending to background");
         browser.runtime.sendMessage({
-            action: "CaptureTest",
+            action: "captureTest",
             data: {
-                name: testName,
-                subject: testSubjectName,
+                name: testName?.trim(),
+                subject: testSubjectName?.trim(),
                 html: preload
             }
           })

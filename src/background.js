@@ -80,17 +80,19 @@ async function saveToDatabase(data) {
     };
   });
 }
-
 let pendingTest = null;
-
 browser.runtime.onMessage.addListener((message, sender, sendResponse) => {
-
   if (message.action === "captureTest") {
+    console.log("Background recieved:",message);
     pendingTest = message.data;
     sendResponse({ success: true });
-  }
-
-  if (message.action === "getPendingTest") {
-    sendResponse({ test: pendingTest });
+    browser.runtime.sendMessage({
+      action: "sendPendingTest",
+      data: {
+        name: message.data.name,
+        subject: message.data.subject,
+        html: message.data.html
+      }
+    })
   }
 });
