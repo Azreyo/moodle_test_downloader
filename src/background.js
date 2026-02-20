@@ -187,7 +187,7 @@ browser.runtime.onMessage.addListener((message, sender, sendResponse) => {
       console.log("Could not send to popup (popup may be closed):", err.message);
     });
   } else if (message.action === "getPendingTest") { 
-    console.log("Sending pending test to popup:", pendingTestData);
+    //console.log("Sending pending test to popup:", pendingTestData); //debug
     sendResponse({ success: true, data: pendingTestData});
   } else if (message.action === "confirmSave") {
     if (pendingTestData) {

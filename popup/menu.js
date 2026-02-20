@@ -20,7 +20,7 @@ browser.runtime.onMessage.addListener((message, sender, sendResponse) => {
 
 browser.runtime.sendMessage({ action: "getPendingTest" })
   .then(response => {
-    console.log("Got pending test response:", response);
+    //console.log("Got pending test response:", response); //debug
     if (response && response.data) {
       pendingTestData = response.data;
       statusElement.textContent = "Test captured: " + response.data.name;
