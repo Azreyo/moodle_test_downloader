@@ -19,7 +19,7 @@ This project is currently under active development. Some features may be incompl
 | Browser | Support Status | Manifest Version |
 |---------|----------------|------------------|
 | Firefox | Supported | Manifest V2 |
-| Chrome | Planned | Not yet implemented |
+| Chrome | Planned | in Dev |
 | Edge | Planned | Not yet implemented |
 | Opera | Planned | Not yet implemented |
 
