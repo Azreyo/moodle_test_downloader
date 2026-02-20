@@ -1,5 +1,5 @@
 {
-  "manifest_version": 2,
+  "manifest_version": 3,
   "name": "MTD",
   "version": "1.1",
   "author": "Azreyo",
@@ -16,15 +16,14 @@
     "downloads"
   ],
 
-  "browser_action": {
+  "action": {
     "default_icon": "icons/logo.svg",
     "default_title": "MTD",
     "default_popup": "popup/menu.html"
   },
 
   "background": {
-    "scripts": ["src/background.js"],
-    "persistent": false
+    "service_worker": "src/background.js"
   },
 
   "content_scripts": [
@@ -36,7 +35,10 @@
   ],
 
   "web_accessible_resources": [
-    "styles/stylizer.css"
+    {
+      "resources": ["styles/stylizer.css"],
+      "matches": ["<all_urls>"]
+    }
   ],
 
   "browser_specific_settings": {
