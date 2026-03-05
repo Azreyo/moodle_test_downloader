@@ -15,6 +15,7 @@ SHARED_FILES=(
   "popup/menu.js"
   "popup/css/menu.css"
   "styles/stylizer.css"
+  "LICENSE"
 )
 
 CHROME_ICONS=(
