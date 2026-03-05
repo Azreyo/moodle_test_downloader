@@ -38,7 +38,7 @@ This creates two directories:
 
 ### Chrome / Edge
 
-1. Run `./build.sh`
+1. Run `./build.sh` Or Download it from `Release`
 2. Open `chrome://extensions` (or `edge://extensions`)
 3. Enable **Developer mode**
 4. Click **Load unpacked** and select the `dist/chrome/` folder
