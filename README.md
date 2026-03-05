@@ -2,6 +2,8 @@
 
 A cross-browser extension that captures and saves Moodle test content before it becomes unavailable. The extension stores test data locally using IndexedDB, allowing students to review test questions and answers even after teachers restrict access.
 
+**This extension does not collect any data.**
+
 > **Note:** This project is under active development. Some features may be incomplete or subject to change.
 
 ## Features
