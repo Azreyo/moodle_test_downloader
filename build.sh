@@ -44,12 +44,19 @@ for file in "${SHARED_FILES[@]}" "${FIREFOX_ICONS[@]}"; do
 done
 cp manifest.firefox.json "$FIREFOX_DIR/manifest.json"
 
+echo "Packaging ZIPs..."
+(cd "$CHROME_DIR" && zip -r -q "../mtd-chrome.zip" .)
+(cd "$FIREFOX_DIR" && zip -r -q "../mtd-firefox.zip" .)
+
 echo ""
 echo "Build complete!"
 echo "  Chrome  → $CHROME_DIR/"
 echo "  Firefox → $FIREFOX_DIR/"
 echo ""
-echo "To load in Chrome:"
+echo "  Chrome  ZIP → $DIST_DIR/mtd-chrome.zip"
+echo "  Firefox ZIP → $DIST_DIR/mtd-firefox.zip"
+echo ""
+echo "To load unpacked in Chrome:"
 echo "  1. Go to chrome://extensions"
 echo "  2. Enable Developer mode"
 echo "  3. Click 'Load unpacked' and select $CHROME_DIR/"
@@ -58,3 +65,5 @@ echo "To load in Firefox:"
 echo "  1. Go to about:debugging#/runtime/this-firefox"
 echo "  2. Click 'Load Temporary Add-on'"
 echo "  3. Select manifest.json in $FIREFOX_DIR/"
+echo ""
+echo "To submit to stores, upload the corresponding .zip file."
