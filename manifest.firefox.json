@@ -6,10 +6,7 @@
   "description": "Downloader for Moodle tests before teacher hides them",
 
   "icons": {
-    "16": "icons/logo-16.png",
-    "32": "icons/logo-32.png",
-    "48": "icons/logo-48.png",
-    "128": "icons/logo-128.png"
+    "48": "icons/logo.svg"
   },
 
   "permissions": [
@@ -17,17 +14,13 @@
   ],
 
   "action": {
-    "default_icon": {
-      "16": "icons/logo-16.png",
-      "32": "icons/logo-32.png",
-      "48": "icons/logo-48.png"
-    },
+    "default_icon": "icons/logo.svg",
     "default_title": "MTD",
     "default_popup": "popup/menu.html"
   },
 
   "background": {
-    "service_worker": "src/background.js"
+    "scripts": ["src/background.js"]
   },
 
   "content_scripts": [
@@ -43,5 +36,12 @@
       "resources": ["styles/stylizer.css"],
       "matches": ["<all_urls>"]
     }
-  ]
+  ],
+
+  "browser_specific_settings": {
+    "gecko": {
+      "id": "mtd@moodle-test-downloader",
+      "strict_min_version": "109.0"
+    }
+  }
 }

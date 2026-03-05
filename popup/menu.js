@@ -1,3 +1,6 @@
+// Cross-browser compatibility — Chrome uses chrome.*, Firefox uses browser.*
+if (typeof browser === 'undefined') { globalThis.browser = chrome; }
+
 document.addEventListener("DOMContentLoaded", () => {
 const testList = document.getElementById("test-list");
 const saveBtn = document.getElementById("save-btn");
@@ -166,7 +169,7 @@ saveBtn.addEventListener("click", async () => {
   try {
     const response = await browser.runtime.sendMessage({ action: "confirmSave" });
     if (response.success) {
-      alert("Test saved to database!");
+      //alert("Test saved to database!");
       pendingTestData = null;
       statusElement.textContent = "No test captured";
       saveBtn.disabled = true;
@@ -187,7 +190,7 @@ clearBtn.addEventListener("click", async () => {
       const response = await browser.runtime.sendMessage({ action: "clearAllTests" });
       if (response.success) {
         loadTests();
-        alert("All tests cleared");
+        //alert("All tests cleared");
       }
     } catch (err) {
       console.error("Failed to clear tests:", err);

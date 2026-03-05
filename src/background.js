@@ -1,31 +1,35 @@
-let pendingTestData = null;
+// Cross-browser compatibility — Chrome uses chrome.*, Firefox uses browser.*
+if (typeof browser === 'undefined') { globalThis.browser = chrome; }
 
-function updateBadge() {
-  browser.storage.local.get({ saved: [] }).then((data) => {
-    const count = data.saved.length;
+async function updateBadge() {
+  try {
+    const tests = await getAllTests();
+    const count = tests.length;
     if (count > 0) {
-      browser.browserAction.setBadgeText({ text: count.toString() });
-      browser.browserAction.setBadgeBackgroundColor({ color: "#cc0000"});
+      await browser.action.setBadgeText({ text: count.toString() });
+      await browser.action.setBadgeBackgroundColor({ color: "#cc0000" });
     } else {
-      browser.browserAction.setBadgeText({ text: ""});
+      await browser.action.setBadgeText({ text: "" });
     }
-  });
+  } catch (err) {
+    console.error("MTD: Failed to update badge:", err);
+  }
 }
 
 let dbInstance = null;
+
 function openDatabase() {
   if (dbInstance) {
     return Promise.resolve(dbInstance);
   }
-  
+
   return new Promise((resolve, reject) => {
     const request = indexedDB.open('MoodleTest', 1);
 
     request.onupgradeneeded = function (event) {
       const db = event.target.result;
-
-      if(!db.objectStoreNames.contains("test")) {
-        console.log("Creating object store 'test'");
+      if (!db.objectStoreNames.contains("test")) {
+        console.log("MTD: Creating object store 'test'");
         db.createObjectStore("test", {
           keyPath: "id",
           autoIncrement: true
@@ -35,48 +39,44 @@ function openDatabase() {
 
     request.onsuccess = function (event) {
       dbInstance = event.target.result;
-      console.log("Database opened successfully");
+      dbInstance.onclose = () => { dbInstance = null; };
+      console.log("MTD: Database opened successfully");
       resolve(dbInstance);
-    }
+    };
 
     request.onerror = function (event) {
-      console.error("Database error:", event.target.error);
+      console.error("MTD: Database error:", event.target.error);
       reject(event.target.error);
-    }
+    };
   });
 }
 
 async function saveToDatabase(data) {
   const db = await openDatabase();
-  
+
   return new Promise((resolve, reject) => {
     const transaction = db.transaction("test", "readwrite");
     const store = transaction.objectStore("test");
 
-    const request = store.add({
+    store.add({
       name: data.name,
       subject: data.subject,
       html: data.html,
-      createdAt: new Date()
+      createdAt: new Date().toISOString()
     });
 
-    request.onerror = (event) => {
-      console.error("Request error:", event.target.error);
+    transaction.oncomplete = () => {
+      console.log("MTD: Test saved successfully");
+      resolve();
+    };
+
+    transaction.onerror = (event) => {
+      console.error("MTD: Transaction failed:", event.target.error);
       reject(event.target.error);
     };
 
-    transaction.oncomplete = () => {
-      console.log("Transaction completed successfully");
-      resolve();
-    };
-    
-    transaction.onerror = (event) => {
-      console.error("Transaction failed:", event.target.error);
-      reject(event.target.error);
-    };
-    
     transaction.onabort = (event) => {
-      console.error("Transaction aborted:", event.target.error);
+      console.error("MTD: Transaction aborted:", event.target.error);
       reject(new Error("Transaction aborted"));
     };
   });
@@ -84,169 +84,136 @@ async function saveToDatabase(data) {
 
 async function getAllTests() {
   const db = await openDatabase();
-  
+
   return new Promise((resolve, reject) => {
     const transaction = db.transaction("test", "readonly");
     const store = transaction.objectStore("test");
     const request = store.getAll();
 
-    request.onsuccess = () => {
-      console.log("Retrieved all tests:", request.result);
-      resolve(request.result);
-    };
-
-    request.onerror = (event) => {
-      console.error("Error retrieving tests:", event.target.error);
-      reject(event.target.error);
-    };
+    request.onsuccess = () => resolve(request.result);
+    request.onerror = (event) => reject(event.target.error);
   });
 }
 
 async function getTestById(id) {
   const db = await openDatabase();
-  
+
   return new Promise((resolve, reject) => {
     const transaction = db.transaction("test", "readonly");
     const store = transaction.objectStore("test");
     const request = store.get(id);
 
-    request.onsuccess = () => {
-      console.log("Retrieved test:", request.result);
-      resolve(request.result);
-    };
-
-    request.onerror = (event) => {
-      console.error("Error retrieving test:", event.target.error);
-      reject(event.target.error);
-    };
+    request.onsuccess = () => resolve(request.result);
+    request.onerror = (event) => reject(event.target.error);
   });
 }
 
 async function deleteTest(id) {
   const db = await openDatabase();
-  
+
   return new Promise((resolve, reject) => {
     const transaction = db.transaction("test", "readwrite");
     const store = transaction.objectStore("test");
-    const request = store.delete(id);
+    store.delete(id);
 
-    request.onerror = (event) => {
-      console.error("Error deleting test:", event.target.error);
-      reject(event.target.error);
-    };
-
-    transaction.oncomplete = () => {
-      console.log("Test deleted successfully");
-      resolve();
-    };
-    
-    transaction.onerror = (event) => {
-      console.error("Transaction failed:", event.target.error);
-      reject(event.target.error);
-    };
+    transaction.oncomplete = () => resolve();
+    transaction.onerror = (event) => reject(event.target.error);
   });
 }
 
 async function clearAllTests() {
   const db = await openDatabase();
-  
+
   return new Promise((resolve, reject) => {
     const transaction = db.transaction("test", "readwrite");
     const store = transaction.objectStore("test");
-    const request = store.clear();
+    store.clear();
 
-    request.onerror = (event) => {
-      console.error("Error clearing tests:", event.target.error);
-      reject(event.target.error);
-    };
-
-    transaction.oncomplete = () => {
-      console.log("All tests cleared successfully");
-      resolve();
-    };
-    
-    transaction.onerror = (event) => {
-      console.error("Transaction failed:", event.target.error);
-      reject(event.target.error);
-    };
+    transaction.oncomplete = () => resolve();
+    transaction.onerror = (event) => reject(event.target.error);
   });
 }
+
+async function setPendingTest(data) {
+  await browser.storage.local.set({ pendingTest: data });
+}
+
+async function getPendingTest() {
+  const result = await browser.storage.local.get('pendingTest');
+  return result.pendingTest || null;
+}
+
+async function clearPendingTest() {
+  await browser.storage.local.remove('pendingTest');
+}
+
 browser.runtime.onMessage.addListener((message, sender, sendResponse) => {
   if (message.action === "captureTest") {
-    console.log("Background recieved:",message);
-    pendingTestData = message.data;
-    sendResponse({ success: true });
-    browser.runtime.sendMessage({
-      action: "sendPendingTest",
-      data: {
-        name: message.data.name,
-        subject: message.data.subject,
-        html: message.data.html
-      }
-    }).catch(err => {
-      console.log("Could not send to popup (popup may be closed):", err.message);
+    console.log("MTD: Background received capture request");
+    setPendingTest(message.data).then(() => {
+      sendResponse({ success: true });
+      browser.runtime.sendMessage({
+        action: "sendPendingTest",
+        data: message.data
+      }).catch(() => { });
     });
-  } else if (message.action === "getPendingTest") { 
-    //console.log("Sending pending test to popup:", pendingTestData); //debug
-    sendResponse({ success: true, data: pendingTestData});
+    return true;
+
+  } else if (message.action === "getPendingTest") {
+    getPendingTest().then(data => {
+      sendResponse({ success: true, data: data });
+    });
+    return true;
+
   } else if (message.action === "confirmSave") {
-    if (pendingTestData) {
-      saveToDatabase(pendingTestData)
-        .then(() => {
-          console.log("Test saved successfully");
-          pendingTestData = null;
-          updateBadge();
+    getPendingTest().then(async (data) => {
+      if (data) {
+        try {
+          await saveToDatabase(data);
+          await clearPendingTest();
+          await updateBadge();
           sendResponse({ success: true });
-        })
-        .catch(err => {
-          console.error("Save failed:", err);
+        } catch (err) {
           sendResponse({ success: false, error: err.message });
-        });
-      return true;
-    } else {
-      sendResponse({ success: false, error: "No test to save" });
-    }
+        }
+      } else {
+        sendResponse({ success: false, error: "No test to save" });
+      }
+    });
+    return true;
+
   } else if (message.action === "getAllTests") {
-    getAllTests()
-      .then(tests => {
-        sendResponse({ success: true, tests: tests });
-      })
-      .catch(err => {
-        console.error("Failed to get tests:", err);
-        sendResponse({ success: false, error: err.message });
-      });
+    getAllTests().then(tests => {
+      sendResponse({ success: true, tests: tests });
+    }).catch(err => {
+      sendResponse({ success: false, error: err.message });
+    });
     return true;
+
   } else if (message.action === "getTestById") {
-    getTestById(message.id)
-      .then(test => {
-        sendResponse({ success: true, test: test });
-      })
-      .catch(err => {
-        console.error("Failed to get test:", err);
-        sendResponse({ success: false, error: err.message });
-      });
+    getTestById(message.id).then(test => {
+      sendResponse({ success: true, test: test });
+    }).catch(err => {
+      sendResponse({ success: false, error: err.message });
+    });
     return true;
+
   } else if (message.action === "deleteTest") {
-    deleteTest(message.id)
-      .then(() => {
-        updateBadge();
-        sendResponse({ success: true });
-      })
-      .catch(err => {
-        console.error("Failed to delete test:", err);
-        sendResponse({ success: false, error: err.message });
-      });
+    deleteTest(message.id).then(async () => {
+      await updateBadge();
+      sendResponse({ success: true });
+    }).catch(err => {
+      sendResponse({ success: false, error: err.message });
+    });
     return true;
+
   } else if (message.action === "clearAllTests") {
-    clearAllTests()
-      .then(() => {
-        updateBadge();
-        sendResponse({ success: true });
-      })
-      .catch(err => {
-        console.error("Failed to clear tests:", err);
-        sendResponse({ success: false, error: err.message });
-      });
+    clearAllTests().then(async () => {
+      await updateBadge();
+      sendResponse({ success: true });
+    }).catch(err => {
+      sendResponse({ success: false, error: err.message });
+    });
     return true;
   }
 });
